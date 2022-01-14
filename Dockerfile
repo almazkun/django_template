@@ -19,5 +19,3 @@ COPY ./Pipfile.lock .
 RUN pipenv install --deploy --system --ignore-pipfile
 
 COPY . .
-
-ENTRYPOINT "/bin/bash"
