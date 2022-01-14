@@ -2,11 +2,12 @@
 This is a django started template
 
 ## Changes
-1. Added custom user as a default user
-2. Templates folders set
-3. Blacked
-4. Whitenoise installed
-5. Versions fixed
+1. Docker dev and prod setup
+2. Templates 
+3. Bootstrap 5
+4. Logging
+5. Pipenv for environment
+
 
 ## Install
 1. `git clone https://github.com/almazkun/django_template.git`
