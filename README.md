@@ -3,14 +3,12 @@ This is a django started template
 
 ## Changes
 1. Docker dev and prod setup
-2. Templates 
-3. Bootstrap 5
-4. Logging
-5. Pipenv for environment
-6. .env file
-7. Github Actions
-8. Static files 
-9. Docker-compose
+1. Templates 
+1. Bootstrap 5
+1. Logging
+1. Pipenv for environment
+1. .env file
+1. Static files 
 
 
 ## Install
