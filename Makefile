@@ -1,11 +1,9 @@
-# docker-compose run --service-ports -d web gunicorn -b 0.0.0.0:8000 --workers 3 settings.wsgi:application
-
 run:
 	pipenv run python manage.py runserver
 dev:
 	docker-compose up
 prod:
-	docker-compose up -d
+	docker-compose -f docker-compose.prod.yml up -d
 down:
 	docker-compose down -v
 lint:

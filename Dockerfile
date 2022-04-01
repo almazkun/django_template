@@ -10,6 +10,6 @@ RUN apt-get update && apt-get -y upgrade
 
 COPY Pipfile Pipfile.lock ./
 
-RUN pip install pipenv && pipenv install --deploy --system --ignore-pipfile
+RUN pip install pipenv && pipenv install --system 
 
 COPY . .
