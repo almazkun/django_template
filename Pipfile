@@ -4,6 +4,10 @@ url = "https://pypi.org/simple"
 verify_ssl = true
 
 [dev-packages]
+coverage = "*"
+flake8 = "*"
+pylint = "*"
+autoflake = "*"
 
 [packages]
 django = "~=4.0"

@@ -2,7 +2,7 @@
 This is a django started template
 
 ## Changes
-1. Docker dev and prod setup
+1. Docker Compose dev and prod setup
 1. Templates 
 1. Bootstrap 5
 1. Logging

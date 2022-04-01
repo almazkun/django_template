@@ -1,21 +1,15 @@
-FROM python:buster
-
-WORKDIR /usr/src/code
-
-RUN apt-get update && apt-get -y upgrade
+FROM python:3.10-slim
 
 ENV PYTHONDONTWRITEBYTECODE 1
 
 ENV PYTHONUNBUFFERED 1
 
-RUN pip3 install --upgrade pip
+WORKDIR /usr/src/code
 
-RUN pip3 install pipenv
+RUN apt-get update && apt-get -y upgrade
 
-COPY ./Pipfile .
+COPY Pipfile Pipfile.lock ./
 
-COPY ./Pipfile.lock .
-
-RUN pipenv install --deploy --system --ignore-pipfile
+RUN pip install pipenv && pipenv install --deploy --system --ignore-pipfile
 
 COPY . .

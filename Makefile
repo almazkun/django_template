@@ -1,10 +1,15 @@
+# docker-compose run --service-ports -d web gunicorn -b 0.0.0.0:8000 --workers 3 settings.wsgi:application
+
 run:
 	pipenv run python manage.py runserver
 dev:
-	docker build -t django_image .
-	docker run --rm -p 80:80 --mount  type=bind,source="$(shell pwd)",target=/usr/src/code --name django_container django_image python manage.py runserver 0.0.0.0:80
+	docker-compose up
 prod:
-	docker build -t django_image .
-	docker run --rm -d -p 80:80 --name django_container django_image gunicorn --bind 0.0.0.0:80 --workers 3 settings.wsgi:application
-stop:
-	docker stop django_container
+	docker-compose up -d
+down:
+	docker-compose down -v
+lint:
+	pipenv run isort --recursive --force-single-line-imports --line-width 999 .
+	pipenv run autoflake --recursive --ignore-init-module-imports --in-place --remove-all-unused-imports .
+	pipenv run isort --recursive --use-parentheses --trailing-comma --multi-line 3 --force-grid-wrap 0 --line-width 88 .
+	pipenv run black .
