@@ -1,20 +1,18 @@
-FROM python:3.11-slim
+FROM python:3.12-slim
+
+LABEL org.opencontainers.image.source=https://github.com/almazkun/django_template
 
 WORKDIR /app
 
 ENV PYTHONDONTWRITEBYTECODE 1
-
 ENV PYTHONUNBUFFERED 1
 
 COPY Pipfile Pipfile.lock ./
+RUN \
+    pip install pipenv gunicorn  && \
+    pipenv install --deploy --ignore-pipfile --system
 
-RUN pip3 install pipenv gunicorn && pipenv install --system
+COPY settings static templates manage.py ./
 
-COPY settings ./settings
-COPY static ./static
-COPY templates ./templates
-COPY manage.py ./
-
-ENTRYPOINT [ "gunicorn" ]
-
-CMD [ "--bind", "0.0.0.0:8000", "settings.wsgi:application" ]
+ENTRYPOINT ["gunicorn"]
+CMD ["--bind", "0.0.0.0:8000", "settings.wsgi:application", "-w", "4", "--threads", "10" ]

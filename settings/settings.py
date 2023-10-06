@@ -32,6 +32,14 @@ ALLOWED_HOSTS = (
     else []
 )
 
+# CSRF settings
+# https://docs.djangoproject.com/en/4.1/ref/settings/#csrf-cookie-httponly
+CSRF_TRUSTED_ORIGINS = (
+    os.getenv("DJANGO_CSRF_TRUSTED_ORIGINS").split(",")
+    if os.getenv("DJANGO_CSRF_TRUSTED_ORIGINS")
+    else []
+)
+
 # Application definition
 
 INSTALLED_APPS = [
@@ -184,11 +192,3 @@ LOGGING = {
         "level": "DEBUG",
     },
 }
-
-# CSRF settings
-# https://docs.djangoproject.com/en/4.1/ref/settings/#csrf-cookie-httponly
-CSRF_TRUSTED_ORIGINS = (
-    os.getenv("DJANGO_CSRF_TRUSTED_ORIGINS").split(",")
-    if os.getenv("DJANGO_CSRF_TRUSTED_ORIGINS")
-    else []
-)

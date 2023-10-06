@@ -1,64 +1,74 @@
+REGISTRY=ghcr.io/almazkun
+IMAGE_NAME=django_template
+CONTAINER_NAME=django_template_container
+VERSION=0.1.0
+
 lint:
-	pipenv run isort --recursive --force-single-line-imports --line-width 999 .
-	pipenv run autoflake --recursive --ignore-init-module-imports --in-place --remove-all-unused-imports .
-	pipenv run isort --recursive --use-parentheses --trailing-comma --multi-line 3 --force-grid-wrap 0 --line-width 140 .
+	@echo "Running lint..."
+	pipenv run ruff check --fix -e .
 	pipenv run black .
+	pipenv run djlint . --reformat
 
-cov:
-	docker compose exec web pip install coverage
-	docker compose exec web coverage run ./manage.py test 
-	docker compose exec web coverage html
-	docker compose exec web coverage report -m
-
-up:
-	docker compose up -d web --build
-	docker compose up -d nginx
-	docker ps -a
-
-ps: 
-	docker ps -a
-
-down:
-	docker compose down	-v
-
-down_prod:
-	docker compose -f docker-compose.prod.yml down -v
-
-_prod:
-	docker compose -f docker-compose.prod.yml up db -d --build
-	docker compose -f docker-compose.prod.yml up -d --build
-	docker ps -a
-
-collectstatic:
-	docker compose exec web python manage.py collectstatic --no-input
-
-makemessages:
-	docker compose exec web python manage.py makemessages -a
-
-compilemessages:
-	docker compose exec web python manage.py compilemessages
-
-migrate:
-	docker compose exec web python manage.py migrate
-
-makemigrations:
-	docker compose exec web python manage.py makemigrations
-
-demo:
-	docker compose exec web python manage.py demo
-	
 build:
-	docker compose build
+	@echo "Building..."
+	docker build -t $(REGISTRY)/$(IMAGE_NAME):$(VERSION) .
+	docker tag $(REGISTRY)/$(IMAGE_NAME):$(VERSION) $(REGISTRY)/$(IMAGE_NAME):latest
+
+push:
+	@echo "Pushing..."
+	docker push $(REGISTRY)/$(IMAGE_NAME):$(VERSION)
+	docker push $(REGISTRY)/$(IMAGE_NAME):latest
+
+run:
+	@echo "Running..."
+	docker run \
+		-it \
+		--rm \
+		-p 8000:8000 \
+		--name $(CONTAINER_NAME) \
+		-v $(PWD):/app \
+		--env-file .env \
+		--entrypoint python \
+		$(REGISTRY)/$(IMAGE_NAME):$(VERSION) manage.py runserver 0.0.0.0:8000
+prod:
+	@echo "Running..."
+	docker run \
+		-it \
+		--rm \
+		-d \
+		-p 8000:8000 \
+		--name $(CONTAINER_NAME) \
+		--env-file .env \
+		$(REGISTRY)/$(IMAGE_NAME):$(VERSION)
+
+stop:
+	@echo "Stopping..."
+	docker stop $(CONTAINER_NAME)
+
+pull:
+	@echo "Pulling..."
+	docker pull $(REGISTRY)/$(IMAGE_NAME):$(VERSION)
 
 logs:
-	docker compose logs -f
+	@echo "Showing logs..."
+	docker logs $(CONTAINER_NAME) -f
 
-logs_prod:
-	docker compose -f docker-compose.prod.yml logs -f
+manage:
+	@echo "Running manage.py..."
+	docker exec -it $(CONTAINER_NAME) python manage.py $(cmd)
 
 test:
-	docker compose run --rm --entrypoint="python" web manage.py test ${K}
+	@echo "Running tests..."
+	make manage cmd="test"
 
-prod: _prod collectstatic
+migrate:
+	@echo "Running migrations..."
+	make manage cmd="migrate"
 
-prod_restart: down_prod prod
+makemigrations:
+	@echo "Making migrations..."
+	make manage cmd="makemigrations"
+
+createsuperuser:
+	@echo "Creating superuser..."
+	make manage cmd="createsuperuser"
