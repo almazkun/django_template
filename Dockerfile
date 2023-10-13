@@ -12,7 +12,10 @@ RUN \
     pip install pipenv gunicorn  && \
     pipenv install --deploy --ignore-pipfile --system
 
-COPY settings static templates manage.py ./
+COPY settings/ ./settings/
+COPY static/ ./static/
+COPY templates/ ./templates/
+COPY manage.py ./
 
 ENTRYPOINT ["gunicorn"]
 CMD ["--bind", "0.0.0.0:8000", "settings.wsgi:application", "-w", "4", "--threads", "10" ]

@@ -9,6 +9,9 @@ lint:
 	pipenv run black .
 	pipenv run djlint . --reformat
 
+ps:
+	@docker ps -a
+
 build:
 	@echo "Building..."
 	docker build -t $(REGISTRY)/$(IMAGE_NAME):$(VERSION) .
@@ -40,6 +43,7 @@ prod:
 		--name $(CONTAINER_NAME) \
 		--env-file .env \
 		$(REGISTRY)/$(IMAGE_NAME):$(VERSION)
+	make ps
 
 stop:
 	@echo "Stopping..."
