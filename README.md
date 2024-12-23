@@ -9,7 +9,6 @@ This is a django started template
 1. Pipenv for environment
 1. .env file
 1. Static files 
-1. Media files
 1. Makefile commands
 
 

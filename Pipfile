@@ -10,6 +10,11 @@ django = "*"
 ruff = "*"
 black = "*"
 djlint = "*"
+django-debug-toolbar = "*"
+pyinstrument = "*"
+coverage = "*"
+tblib = "*" # for tests not to fail on --parallel option
+
 
 [requires]
-python_version = "3.12"
+python_version = "3"

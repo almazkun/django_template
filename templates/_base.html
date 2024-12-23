@@ -1,6 +1,11 @@
 <!DOCTYPE html>
 <html lang="en" class="h-100">
     <head>
+        <title>
+            {% block title %}
+                Django
+            {% endblock title %}
+        </title>
         {% block meta %}
             {% include "includes/meta.html" %}
         {% endblock meta %}
@@ -9,12 +14,12 @@
         {% endblock style %}
     </head>
     <body class="d-flex flex-column h-100">
-        {% block navigation %}
-            {% include "includes/nav.html" %}
-        {% endblock navigation %}
         {% block messages %}
             {% include "includes/messages.html" %}
         {% endblock messages %}
+        {% block navigation %}
+            {% include "includes/nav.html" %}
+        {% endblock navigation %}
         <div class="flex-shrink-0">
             {% block main_content %}
             {% endblock main_content %}
